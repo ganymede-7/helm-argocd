@@ -1,0 +1,47 @@
+server:
+  ingress:
+    enabled: true
+    ingressClassName: public
+    hostname: argocd.local
+    path: /
+    pathType: ImplementationSpecific
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+
+    extraArgs:
+    - --insecure
+
+  ingressGrpc:
+    enabled: false  # Disable separate GRPC ingress
+
+configs:
+  params:
+    server.insecure: true
+
+applicationSet:
+  enabled: true
+
+controller:
+  replicas: 1
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: microk8s-hostpath
+
+redis:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: microk8s-hostpath
+
+dex:
+  enabled: true
+
+repoServer:
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: microk8s-hostpath
